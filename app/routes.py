@@ -20,7 +20,10 @@ VALID_KEYS=[
 @route('/', method='POST')
 def handle_post():
     # parse request
-    values = json.load(request.body)
+    try:
+        values = json.load(request.body)
+    except json.decoder.JSONDecodeError as err:
+        abort(400, text="Error decoding JSON dictionary!\nError: %s" % err)
 
     # validate type
     if not isinstance(values, dict):
